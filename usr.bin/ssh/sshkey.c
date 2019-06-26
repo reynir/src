@@ -1910,6 +1910,8 @@ sshkey_shield_private(struct sshkey *k)
 	enclen = sshbuf_len(prvbuf);
 	if ((enc = malloc(enclen)) == NULL) {
 		r = SSH_ERR_ALLOC_FAIL;
+		/* set enclen to zero so we don't explicit_bzero() NULL */
+		enclen = 0;
 		goto out;
 	}
 	if ((r = cipher_crypt(cctx, 0, enc,
